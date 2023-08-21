@@ -26,6 +26,7 @@ const ProfileScreen = () => {
           <Text>User Profile:</Text>
           <Text>Username: {userData.username}</Text>
           <Text>Email: {userData.email}</Text>
+          <Text>Annual Place: {userData.annualPlace}</Text>
           {/* Add more fields as needed */}
         </View>
       ) : (
