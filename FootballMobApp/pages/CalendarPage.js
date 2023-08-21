@@ -54,10 +54,10 @@ class CalendarPage extends Component {
             <View>
               <Text>Game: {item.name}</Text>
               <Text>Date: {item.date}</Text>
-              <Text>HomeTeam : {item.homeTeam}</Text>
-              <Text>HomeScore : {item.homeScore}</Text>
-              <Text>AwayTeam : {item.awayTeam}</Text>
-              <Text>AwayScore : {item.awayScore}</Text>
+              <Text>HomeTeam : {item.homeTeam} {item.homeScore}</Text>
+              
+              <Text>AwayTeam : {item.awayTeam} {item.awayScore}</Text>
+              
               {/* Add more details you want to display */}
               <Button
                 title="Edit"
