@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import DrawerContent from './DrawerContent';
+import DrawerContent from './components/LogoutButton';
 import HomePage from './pages/HomePage';
 import CalendarPage from './pages/CalendarPage';
 import LoginPage from './pages/LoginPage';
 import ProfileScreen from './pages/ProfileScreen';
 import { UserService } from './services/userService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LogoutButton from './components/LogoutButton';
 
 const Drawer = createDrawerNavigator();
 
@@ -46,7 +47,7 @@ const App = () => {
   return (
     <NavigationContainer>
       {loggedIn ? (
-        <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} logout={handleLogout} />}>
+        <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <LogoutButton {...props} logout={handleLogout} />}>
           <Drawer.Screen name="Home" component={HomePage} />
           <Drawer.Screen name="Calendar" component={CalendarPage} />
           <Drawer.Screen name="Profile" component={ProfileScreen} />

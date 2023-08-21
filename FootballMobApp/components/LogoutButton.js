@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { DrawerItemList } from '@react-navigation/drawer';
 
-const DrawerContent = ({ logout, ...props }) => {
+const LogoutButton = ({ logout, ...props }) => {
   return (
     <View style={styles.container}>
       <DrawerItemList {...props} />
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DrawerContent;
+export default LogoutButton;
