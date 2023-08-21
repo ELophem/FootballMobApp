@@ -1,9 +1,9 @@
+// LoginPage.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { UserService } from '../services/userService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginPage = ({ navigation }) => {
+const LoginPage = ({ navigation, onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,20 +14,16 @@ const LoginPage = ({ navigation }) => {
         username: username,
         password: password,
       };
-  
+
       const loginResponse = await userService.login(userLogin);
-  
+
       if (loginResponse.token) {
-        const token = loginResponse.token;
-        await AsyncStorage.setItem('token', token);
-  
-        console.log('Token stored:', token); // Add this line
-  
         // Fetch user profile after successful login
         const userProfile = await userService.getUserProfile();
-        console.log('User Profile Data:', userProfile);
-  
-        navigation.navigate('Profile');
+
+        if (userProfile && userProfile.error !== 'Not Authorized') {
+          onLogin(); // Notify App component that user is logged in
+        }
       } else {
         console.log('Token not found in login response');
       }
@@ -35,8 +31,7 @@ const LoginPage = ({ navigation }) => {
       console.error('Login error:', error);
     }
   };
-  
-  
+
   return (
     <View style={styles.container}>
       <Text>Login</Text>
