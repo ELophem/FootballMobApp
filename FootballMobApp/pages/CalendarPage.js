@@ -1,6 +1,8 @@
+// CalendarPage.js
 import React, { Component } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
 import { GamesService } from '../services/games.service'; // Update the path to your service
+import EditPopUpComponent from '../components/EditPopUpComponent'; // Update the path
 
 class CalendarPage extends Component {
   constructor(props) {
@@ -11,6 +13,12 @@ class CalendarPage extends Component {
       gameId: 0,
     };
     this.gamesService = new GamesService();
+
+    // Create a ref for the EditPopUpComponent
+    this.editPopUpRef = React.createRef();
+
+    this.updateGameScore = this.updateGameScore.bind(this);
+
   }
 
   componentDidMount() {
@@ -18,14 +26,12 @@ class CalendarPage extends Component {
   }
 
   loadGames() {
-    this.gamesService.getGames() // Correct the method name to getGames()
+    this.gamesService.getGames()
       .then(data => {
         this.setState({
           games: data.games,
           userType: data.admin,
         });
-        console.log(this.state.userType);
-        console.log(this.state.games);
       })
       .catch(error => {
         console.error('Error loading games:', error);
@@ -34,19 +40,27 @@ class CalendarPage extends Component {
 
   editGame(game) {
     this.setState({ gameId: game.gameId }, () => {
-      console.log(this.state.gameId);
-      console.log(this.state.games);
-
       // Open edit popup here
-      // You can use your preferred modal/pop-up library or create a custom component
-      // to display the edit form
+      this.editPopUpRef.current.show(); // Show the EditPopUpComponent
     });
   }
-
+  updateGameScore(gameId, newHomeScore, newAwayScore) {
+    const updatedGames = this.state.games.map(game => {
+      if (game.gameId === gameId) {
+        return {
+          ...game,
+          homeScore: newHomeScore,
+          awayScore: newAwayScore,
+        };
+      }
+      return game;
+    });
+  
+    this.setState({ games: updatedGames });
+  }
   render() {
     return (
       <View>
-        <Text>Calendar Page</Text>
         <FlatList
           data={this.state.games}
           keyExtractor={(item) => item.gameId.toString()}
@@ -55,10 +69,7 @@ class CalendarPage extends Component {
               <Text>Game: {item.name}</Text>
               <Text>Date: {item.date}</Text>
               <Text>HomeTeam : {item.homeTeam} {item.homeScore}</Text>
-              
               <Text>AwayTeam : {item.awayTeam} {item.awayScore}</Text>
-              
-              {/* Add more details you want to display */}
               <Button
                 title="Edit"
                 onPress={() => this.editGame(item)}
@@ -66,10 +77,16 @@ class CalendarPage extends Component {
             </View>
           )}
         />
+
+        {/* Add the EditPopUpComponent */}
+        <EditPopUpComponent
+          ref={this.editPopUpRef}
+          gameId={this.state.gameId}
+          updateGameScore={this.updateGameScore}
+        />
       </View>
     );
   }
 }
 
 export default CalendarPage;
-//test

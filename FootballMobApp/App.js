@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import DrawerContent from './components/LogoutButton';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ArticleService } from './services/article.service'; // Update the path
 import HomePage from './pages/HomePage';
 import CalendarPage from './pages/CalendarPage';
-import LoginPage from './pages/LoginPage';
 import ProfileScreen from './pages/ProfileScreen';
-import { UserService } from './services/userService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginPage from './pages/LoginPage';
 import LogoutButton from './components/LogoutButton';
+import ArticleDetail from './pages/ArticleDetail';
+import EditArticle from './pages/EditArticle';
+import CreateArticle from './pages/CreateArticle';
+
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-const App = () => {
+function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -20,43 +24,35 @@ const App = () => {
   }, []);
 
   const checkLoginStatus = async () => {
-    const token = await AsyncStorage.getItem('token');
-    
-    if (token) {
-      const userService = new UserService();
-      try {
-        const userProfile = await userService.getUserProfile();
-        if (userProfile && userProfile.error !== 'Not Authorized') {
-          setLoggedIn(true);
-        } else {
-          setLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('User profile fetch error:', error);
-        setLoggedIn(false);
-      }
-    }
+    // Your login status checking logic
   };
 
   const handleLogout = async () => {
-    // Clear token and perform other logout actions
-    await AsyncStorage.removeItem('token'); // Clear the authentication token
-    setLoggedIn(false); // Reset login state
+    // Your logout logic
   };
+
+
 
   return (
     <NavigationContainer>
       {loggedIn ? (
-        <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <LogoutButton {...props} logout={handleLogout} />}>
+        <Drawer.Navigator
+          initialRouteName="Home"
+          drawerContent={(props) => <LogoutButton {...props} logout={handleLogout} />}
+        >
           <Drawer.Screen name="Home" component={HomePage} />
           <Drawer.Screen name="Calendar" component={CalendarPage} />
           <Drawer.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="ArticleDetail" component={ArticleDetail} />
+          <Stack.Screen name="EditArticle" component={EditArticle} />
+          <Stack.Screen name="CreateArticle" component={CreateArticle} />
+          {/* Add other screen components */}
         </Drawer.Navigator>
       ) : (
         <LoginPage onLogin={() => setLoggedIn(true)} />
       )}
     </NavigationContainer>
   );
-};
+}
 
 export default App;

@@ -61,4 +61,55 @@ export class GamesService {
       throw error;
     }
   }
+
+  async editGame(gameId, newHomeScore, newAwayScore) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+  
+      if (!token) {
+        throw new Error('Token not found');
+      }
+  
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+  
+      console.log('newHomeScore:', newHomeScore);
+      console.log('newAwayScore:', newAwayScore);
+  
+      const parsedHomeScore = parseInt(newHomeScore);
+      const parsedAwayScore = parseInt(newAwayScore);
+  
+      console.log('Parsed Home Score:', parsedHomeScore);
+      console.log('Parsed Away Score:', parsedAwayScore);
+  
+      const data = {
+        homeScore: parsedHomeScore,
+        awayScore: parsedAwayScore,
+      };
+  
+      const response = await fetch(this.baseUrl + `game/${gameId}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(data),
+      });
+  
+      const responseData = await response.text();
+  
+      console.log('Edit Game Response:', responseData);
+  
+      if (!response.ok) {
+        console.error('Edit Game Error:', responseData);
+      }
+  
+      return responseData;
+    } catch (error) {
+      console.error('editGame error:', error);
+      throw error;
+    }
+  }
+  
+  
+  
 }
