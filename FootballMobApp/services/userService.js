@@ -59,4 +59,27 @@ export class UserService {
       throw error;
     }
   }
+
+  async getUser(userId) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('Token not found');
+      }
+
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(this.baseUrl + 'username/' + userId, { headers });
+      const data = await response.json();
+
+      return data; // Return the user data
+    } catch (error) {
+      console.error('getUser error:', error);
+      throw error;
+    }
+  }
 }

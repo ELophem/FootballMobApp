@@ -14,7 +14,7 @@ const LogoutButton = ({ logout, ...props }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20, // Add appropriate styling
+    paddingTop: 20, 
   },
 });
 

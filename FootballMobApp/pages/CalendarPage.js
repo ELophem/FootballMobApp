@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { GamesService } from '../services/games.service';
 import EditPopUpComponent from '../components/EditPopUpComponent';
 
@@ -59,30 +59,51 @@ class CalendarPage extends Component {
       <View style={styles.gameBox}>
         <Text style={styles.gameName}>Game: {item.name}</Text>
         <Text>Date: {item.date}</Text>
+        <Text>{item.competition}</Text>
         <Text style={styles.teamText}>HomeTeam: <Text style={styles.homeTeam}>{item.homeTeam}</Text> {item.homeScore}</Text>
         <Text style={styles.teamText}>AwayTeam: <Text style={styles.awayTeam}>{item.awayTeam}</Text> {item.awayScore}</Text>
-      </View>
-      <TouchableOpacity style={styles.editButton} onPress={() => this.editGame(item)}>
-        <Text>Edit</Text>
-      </TouchableOpacity>
+        </View>
+      {this.props.userProfile?.admin && ( // Check if the user is an admin
+        <TouchableOpacity style={styles.editButton} onPress={() => this.editGame(item)}>
+          <Text>Edit</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 
   render() {
+    const upcomingGames = this.state.games.filter(
+      (game) => game.homeScore === 0 && game.awayScore === 0
+    );
+    const pastGames = this.state.games.filter(
+      (game) => game.homeScore !== 0 || game.awayScore !== 0
+    );
+
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={this.state.games}
-          keyExtractor={(item) => item.gameId.toString()}
-          renderItem={this.renderGameItem}
-          contentContainerStyle={styles.scrollContainer}
-        />
+      <ScrollView style={styles.container}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Past Games</Text>
+          {pastGames.map((game, index) => (
+            <View key={index}>
+              {this.renderGameItem({ item: game })}
+            </View>
+          ))}
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Next Games</Text>
+          {upcomingGames.map((game, index) => (
+            <View key={index}>
+              {this.renderGameItem({ item: game })}
+            </View>
+          ))}
+        </View>
+
         <EditPopUpComponent
           ref={this.editPopUpRef}
           gameId={this.state.gameId}
           updateGameScore={this.updateGameScore}
         />
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -127,6 +148,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#3498db',
     padding: 5,
     borderRadius: 5,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#3f51b5',
+    padding: 20, 
   },
 });
 

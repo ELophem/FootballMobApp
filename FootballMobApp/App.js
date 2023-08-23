@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ArticleService } from './services/article.service'; // Update the path
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { ArticleService } from './services/article.service';
 import DrawerContent from './components/LogoutButton';
 import { UserService } from './services/userService';
 import HomePage from './pages/HomePage';
@@ -14,7 +15,8 @@ import LogoutButton from './components/LogoutButton';
 //import EditArticle from './pages/EditArticle';
 import CreateArticle from './pages/CreateArticle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import CustomDrawerContent from './components/CustomDrawerContent'; 
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 const Drawer = createDrawerNavigator();
@@ -41,33 +43,54 @@ function App() {
         console.log('User Profile Response:', userProfile);
         if (userProfile && userProfile.error !== 'Not Authorized') {
           setLoggedIn(true);
-          setUserProfile(userProfile); // Set the user profile in the state
+          setUserProfile(userProfile); 
         } else {
           setLoggedIn(false);
-          setUserProfile(null); // Reset user profile
+          setUserProfile(null); 
         }
       } catch (error) {
         console.error('User profile fetch error:', error);
         setLoggedIn(false);
-        setUserProfile(null); // Reset user profile
+        setUserProfile(null); 
       }
       
-    }//
+    }
   };
 
   const handleLogout = async () => {
-    // Clear token and perform other logout actions
-    await AsyncStorage.removeItem('token'); // Clear the authentication token
-    setLoggedIn(false); // Reset login state
-    setUserProfile(null); // Reset user profile
+  
+    await AsyncStorage.removeItem('token');
+    setLoggedIn(false); 
+    setUserProfile(null); 
   };
 
 
   return (
+    
     <NavigationContainer>
       {loggedIn ? (
-          <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <LogoutButton {...props} logout={handleLogout} />}>
-        
+          <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <LogoutButton {...props} logout={handleLogout} />}
+          
+          drawerStyle={{
+            backgroundColor: '#f0f0f0',
+            width: 250, 
+          }}
+          screenOptions={{
+            drawerActiveTintColor: '#3498db', 
+            drawerInactiveTintColor: '#666', 
+            drawerLabelStyle: {
+              fontSize: 16,
+              fontWeight: 'bold',
+            },
+          }}
+          theme={{
+            colors: {
+              background: '#3f51b5', 
+            },
+          }}
+          >
+            
+            
         <Drawer.Screen
             name="Home"
             options={{ headerShown: true }}
@@ -75,7 +98,11 @@ function App() {
             {props => <HomePage {...props} userProfile={userProfile} />}
           </Drawer.Screen>
             
-          <Drawer.Screen name="Calendar" component={CalendarPage} />
+          <Drawer.Screen name="Calendar">
+            {(props) => (
+              <CalendarPage {...props} userProfile={userProfile} />
+            )}
+          </Drawer.Screen>
           <Drawer.Screen name="Profile" component={ProfileScreen} />
           {console.log('User Profile Admin when building create article:', userProfile?.admin)}
           {userProfile?.admin && (
@@ -84,8 +111,11 @@ function App() {
         </Drawer.Navigator>
       ) : (
         <LoginPage onLogin={() => setLoggedIn(true)} />
+
+        
       )}
     </NavigationContainer>
+    
   );
 }
 

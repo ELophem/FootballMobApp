@@ -41,7 +41,6 @@ class EditArticle extends Component {
   }
 
   componentWillUnmount() {
-    // Clear the state values when the component unmounts
     this.setState({
       articleId: null,
       title: '',
@@ -71,14 +70,14 @@ class EditArticle extends Component {
       subtitle,
       body,
     };
-
-    this.articleService.updateArticle(articleId, updatedArticle)
-      .then(data => {
-        // Handle success, navigate back
-        this.props.route.params.onArticleSaved(); // Call the onArticleSaved function from navigation options
+  
+    this.articleService
+      .updateArticle(articleId, updatedArticle)
+      .then((data) => {
+        this.props.route.params.onArticleSaved(); // Call the function
         this.props.navigation.goBack();
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error updating article:', error);
       });
   };
@@ -173,6 +172,11 @@ const styles = StyleSheet.create({
   buttonBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#3f51b5', 
+    padding: 20, 
   },
 });
 
