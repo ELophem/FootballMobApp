@@ -105,6 +105,34 @@ export class ArticleService {
       throw error;
     }
   }
+
+  async postArticle(articleData) {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('Token not found');
+      }
+
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await fetch(this.baseUrl + 'article', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(articleData),
+      });
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.error('postArticle error:', error);
+      throw error;
+    }
+  }
 }
 
 export default ArticleService;

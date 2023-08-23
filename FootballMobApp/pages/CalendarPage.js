@@ -1,8 +1,7 @@
-// CalendarPage.js
 import React, { Component } from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
-import { GamesService } from '../services/games.service'; // Update the path to your service
-import EditPopUpComponent from '../components/EditPopUpComponent'; // Update the path
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { GamesService } from '../services/games.service';
+import EditPopUpComponent from '../components/EditPopUpComponent';
 
 class CalendarPage extends Component {
   constructor(props) {
@@ -13,12 +12,8 @@ class CalendarPage extends Component {
       gameId: 0,
     };
     this.gamesService = new GamesService();
-
-    // Create a ref for the EditPopUpComponent
     this.editPopUpRef = React.createRef();
-
     this.updateGameScore = this.updateGameScore.bind(this);
-
   }
 
   componentDidMount() {
@@ -40,10 +35,10 @@ class CalendarPage extends Component {
 
   editGame(game) {
     this.setState({ gameId: game.gameId }, () => {
-      // Open edit popup here
-      this.editPopUpRef.current.show(); // Show the EditPopUpComponent
+      this.editPopUpRef.current.show();
     });
   }
+
   updateGameScore(gameId, newHomeScore, newAwayScore) {
     const updatedGames = this.state.games.map(game => {
       if (game.gameId === gameId) {
@@ -58,27 +53,30 @@ class CalendarPage extends Component {
   
     this.setState({ games: updatedGames });
   }
+
+  renderGameItem = ({ item }) => (
+    <View style={styles.gameContainer}>
+      <View style={styles.gameBox}>
+        <Text style={styles.gameName}>Game: {item.name}</Text>
+        <Text>Date: {item.date}</Text>
+        <Text style={styles.teamText}>HomeTeam: <Text style={styles.homeTeam}>{item.homeTeam}</Text> {item.homeScore}</Text>
+        <Text style={styles.teamText}>AwayTeam: <Text style={styles.awayTeam}>{item.awayTeam}</Text> {item.awayScore}</Text>
+      </View>
+      <TouchableOpacity style={styles.editButton} onPress={() => this.editGame(item)}>
+        <Text>Edit</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <FlatList
           data={this.state.games}
           keyExtractor={(item) => item.gameId.toString()}
-          renderItem={({ item }) => (
-            <View>
-              <Text>Game: {item.name}</Text>
-              <Text>Date: {item.date}</Text>
-              <Text>HomeTeam : {item.homeTeam} {item.homeScore}</Text>
-              <Text>AwayTeam : {item.awayTeam} {item.awayScore}</Text>
-              <Button
-                title="Edit"
-                onPress={() => this.editGame(item)}
-              />
-            </View>
-          )}
+          renderItem={this.renderGameItem}
+          contentContainerStyle={styles.scrollContainer}
         />
-
-        {/* Add the EditPopUpComponent */}
         <EditPopUpComponent
           ref={this.editPopUpRef}
           gameId={this.state.gameId}
@@ -88,5 +86,48 @@ class CalendarPage extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    padding: 20,
+  },
+  scrollContainer: {
+    paddingBottom: 20,
+  },
+  gameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 5,
+    elevation: 3,
+  },
+  gameBox: {
+    flex: 1,
+  },
+  gameName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  teamText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  homeTeam: {
+    color: '#3498db',
+  },
+  awayTeam: {
+    color: '#e74c3c',
+  },
+  editButton: {
+    backgroundColor: '#3498db',
+    padding: 5,
+    borderRadius: 5,
+  },
+});
 
 export default CalendarPage;

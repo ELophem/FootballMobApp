@@ -34,7 +34,7 @@ const LoginPage = ({ navigation, onLogin }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
+      <Text>Before trying to access the rest of the App please Log In with your credentials</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text,TouchableOpacity, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+
 import { ArticleService } from '../services/article.service';
 
 class EditArticle extends Component {
@@ -13,22 +14,8 @@ class EditArticle extends Component {
     };
     this.articleService = new ArticleService();
   }
-
-  componentDidMount() {
-    this.fetchArticleContent();
-  }
-
-  componentWillUnmount() {
-    // Clear the state values when the component unmounts
-    this.setState({
-      articleId: null,
-      title: '',
-      subtitle: '',
-      body: '',
-    });
-  }
-
   fetchArticleContent = () => {
+    console.log('Article ID:', this.state.articleId);
     this.articleService.getArticle(this.state.articleId)
       .then(data => {
         this.setState({
@@ -41,6 +28,29 @@ class EditArticle extends Component {
         console.error('Error loading article content:', error);
       });
   };
+  componentDidMount() {
+    this.fetchArticleContent();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.route.params.articleId !== this.props.route.params.articleId) {
+      this.setState({ articleId: this.props.route.params.articleId }, () => {
+        this.fetchArticleContent(); // Fetch content for the new articleId
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    // Clear the state values when the component unmounts
+    this.setState({
+      articleId: null,
+      title: '',
+      subtitle: '',
+      body: '',
+    });
+  }
+
+
 
   handleTitleChange = title => {
     this.setState({ title });
@@ -86,29 +96,85 @@ class EditArticle extends Component {
   };
 
   render() {
+    const { route, navigation } = this.props;
+    const articleId = route.params.articleId;
     return (
-      <View>
-        <TextInput
-          value={this.state.title}
-          onChangeText={this.handleTitleChange}
-          placeholder="Title"
-        />
-        <TextInput
-          value={this.state.subtitle}
-          onChangeText={this.handleSubtitleChange}
-          placeholder="Subtitle"
-        />
-        <TextInput
-          value={this.state.body}
-          onChangeText={this.handleBodyChange}
-          multiline
-          placeholder="Body"
-        />
-        <Button title="Save" onPress={this.updateArticle} />
-        <Button title="Delete" onPress={this.deleteArticle} />
+      
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.container}>
+        {/* Your edit article content */}
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Text>Back to Homepage</Text>
+        </TouchableOpacity>
       </View>
+        <View style={styles.box}>
+          <TextInput
+            style={styles.input}
+            value={this.state.title}
+            onChangeText={this.handleTitleChange}
+            placeholder="Title"
+          />
+        </View>
+        <View style={styles.box}>
+          <TextInput
+            style={styles.input}
+            value={this.state.subtitle}
+            onChangeText={this.handleSubtitleChange}
+            placeholder="Subtitle"
+          />
+        </View>
+        <View style={styles.box}>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            value={this.state.body}
+            onChangeText={this.handleBodyChange}
+            multiline
+            placeholder="Body"
+          />
+        </View>
+        <View style={styles.buttonBox}>
+          <Button
+            title="Save"
+            onPress={this.updateArticle}
+            color="#3cb371"
+          />
+          <Button
+            title="Delete"
+            onPress={this.deleteArticle}
+            color="#f44336"
+          />
+        </View>
+      </ScrollView>
     );
   }
+  
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  box: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    marginVertical: 10,
+    borderRadius: 5,
+  },
+  input: {
+    fontSize: 18,
+  },
+  textArea: {
+    height: 150,
+  },
+  buttonBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+});
+
 
 export default EditArticle;
