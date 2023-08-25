@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class ArticleService {
   constructor() {
-    this.baseUrl = 'http://192.168.0.108:3000/api/';
+    this.baseUrl = 'http://192.168.1.59:3000/api/';
   }
 
   async getArticlesList() {

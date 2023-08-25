@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class UserService {
   constructor() {
-    this.baseUrl = 'http://192.168.0.108:3000/api/';
+    this.baseUrl = 'http://192.168.1.59:3000/api/'; //change ip adress of where api is running 
   }
 
   async getUserProfile() {

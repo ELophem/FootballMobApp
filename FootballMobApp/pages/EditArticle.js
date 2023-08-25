@@ -104,9 +104,8 @@ class EditArticle extends Component {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.container}>
-        {/* Your edit article content */}
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text>Back to Homepage</Text>
+        <Text style={styles.backButtonText}>Back to Homepage</Text>
         </TouchableOpacity>
       </View>
         <View style={styles.box}>
@@ -135,16 +134,17 @@ class EditArticle extends Component {
           />
         </View>
         <View style={styles.buttonBox}>
+        <Button
+            title="Delete"
+            onPress={this.deleteArticle}
+            color="#f44336"
+          />
           <Button
             title="Save"
             onPress={this.updateArticle}
             color="#3cb371"
           />
-          <Button
-            title="Delete"
-            onPress={this.deleteArticle}
-            color="#f44336"
-          />
+          
         </View>
       </ScrollView>
     );
@@ -156,6 +156,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'white', 
+    padding: 5,
+    borderRadius: 5,
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
   box: {
     backgroundColor: '#f0f0f0',
