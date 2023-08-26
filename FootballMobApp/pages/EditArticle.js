@@ -3,6 +3,8 @@ import { View, Text,TouchableOpacity, TextInput, Button, StyleSheet, ScrollView 
 
 import { ArticleService } from '../services/article.service';
 
+
+//edit article page where we could edit the content of the actual ArticleId we're on
 class EditArticle extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +16,8 @@ class EditArticle extends Component {
     };
     this.articleService = new ArticleService();
   }
+
+  //getthe content of that article 
   fetchArticleContent = () => {
     console.log('Article ID:', this.state.articleId);
     this.articleService.getArticle(this.state.articleId)
@@ -50,7 +54,7 @@ class EditArticle extends Component {
   }
 
 
-
+//Set the new state of the different articles
   handleTitleChange = title => {
     this.setState({ title });
   };
@@ -81,7 +85,7 @@ class EditArticle extends Component {
         console.error('Error updating article:', error);
       });
   };
-
+// handle the deletion of an article with deleteArticle
   deleteArticle = async () => {
     const { articleId } = this.state;
 

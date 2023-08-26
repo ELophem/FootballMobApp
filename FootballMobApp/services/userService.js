@@ -3,10 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class UserService {
   constructor() {
-    this.baseUrl = 'http://192.168.1.59:3000/api/'; //change ip adress of where api is running 
+    
+    this.baseUrl = 'http://192.168.0.108:3000/api/'; //change ip adress of where api is running 
   }
 
-  async getUserProfile() {
+  async getUserProfile() {  //get the user profile with token if it exist i get it back as a json file
     try {
       const token = await AsyncStorage.getItem('token');
   
@@ -34,7 +35,7 @@ export class UserService {
   }
   
 
-  async login(user) {
+  async login(user) { 
     try {
       const response = await fetch(this.baseUrl + 'login', {
         method: 'POST',
@@ -60,7 +61,7 @@ export class UserService {
     }
   }
 
-  async getUser(userId) {
+  async getUser(userId) {  // get userid to use in the articles for the name of the writer
     try {
       const token = await AsyncStorage.getItem('token');
 

@@ -2,10 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class ArticleService {
   constructor() {
-    this.baseUrl = 'http://192.168.1.59:3000/api/';
+    this.baseUrl = 'http://192.168.0.108:3000/api/';//change ip adress of where api is running
   }
 
-  async getArticlesList() {
+  async getArticlesList() { //get the article list and store it to show up on the Homepage
     try {
       const token = await AsyncStorage.getItem('token');
 
@@ -27,7 +27,7 @@ export class ArticleService {
       throw error;
     }
   }
-
+  // get the more detailed information about an article to show up on the article detail screen
   async getArticle(id) {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -50,7 +50,7 @@ export class ArticleService {
       throw error;
     }
   }
-
+ // method to update the content of an article 
   async updateArticle(id, updatedArticle) {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -78,7 +78,7 @@ export class ArticleService {
       throw error;
     }
   }
-
+ //method to delete an article  based on its ID when pressing the delete button
   async deleteArticle(id) {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -105,7 +105,7 @@ export class ArticleService {
       throw error;
     }
   }
-
+ // method to post an article when creating an article on the create article screen
   async postArticle(articleData) {
     try {
       const token = await AsyncStorage.getItem('token');

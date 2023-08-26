@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { ArticleService } from '../services/article.service';
 
 import { UserService } from '../services/userService';
-
+//fetching the specific content of an article Id so that we can inspect and read it 
 class ArticleDetail extends Component {
   constructor(props) {
     super(props);

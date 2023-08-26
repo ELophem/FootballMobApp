@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { UserService } from '../services/userService';
 
+
+//Profile SCreen where we wil fetch the user profile of the actual user connected and show the different data of it 
 const ProfileScreen = () => {
   const [userData, setUserData] = useState(null);
 

@@ -2,10 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class GamesService {
   constructor() {
-    this.baseUrl = 'http://192.168.1.59:3000/api/';
+    this.baseUrl = 'http://192.168.0.108:3000/api/';//change ip adress of where api is running
   }
 
-  async getGames() {
+  async getGames() {  //get the games list while being logged in 
     try {
       const token = await AsyncStorage.getItem('token');
   
@@ -34,7 +34,7 @@ export class GamesService {
   
   // You can add more methods here for different game-related requests
   
-  // For example, a method to get game scores
+  //method to get game scores
   async getGameScores(gameId) {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -61,7 +61,7 @@ export class GamesService {
       throw error;
     }
   }
-
+ // method to edit the game scores 
   async editGame(gameId, newHomeScore, newAwayScore) {
     try {
       const token = await AsyncStorage.getItem('token');

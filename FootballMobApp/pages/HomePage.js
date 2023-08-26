@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ArticleService } from '../services/article.service';
 import EditArticle from './EditArticle';
 import ArticleDetail from './ArticleDetail';
-
+//HomePage component with all the functios used
 const Stack = createStackNavigator();
 
 class HomePage extends Component {
@@ -19,10 +19,10 @@ class HomePage extends Component {
     this.articleService = new ArticleService();
   }
 
-  componentDidMount() {
+  componentDidMount() { //function to use the loadarticles method
     this.loadArticles();
   }
-
+//when query in search bar changed then update the list of articles matching
   handleSearchChange = (query) => {
     this.setState({ searchQuery: query });
   };
@@ -32,14 +32,15 @@ class HomePage extends Component {
     }
   }
 
+
+  // Update the articles state to include the new article
   handleArticlePosted = (newArticle) => {
-    // Update the articles state to include the new article
     this.setState(prevState => ({
       articles: [newArticle, ...prevState.articles],
     }));
   };
   
-
+ //Load articles based on the filter and then get the articles list 
   loadArticles = () => {
     this.articleService
       .getArticlesList()
@@ -59,7 +60,7 @@ class HomePage extends Component {
         console.error('Error loading articles:', error);
       });
   };
-
+ //when edit button article pressed go to that articleid edit page and when the article is saved load the article page again
   editArticle = (article) => {
     const articleId = article.articleId;
     this.props.navigation.navigate('EditArticle', {
@@ -68,7 +69,7 @@ class HomePage extends Component {
     });
   };
   
-
+// render all the article items 
   renderArticleItem = ({ item }) => (
     <View style={styles.articleContainer}>
       <TouchableOpacity

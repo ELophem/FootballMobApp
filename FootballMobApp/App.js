@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomDrawerContent from './components/CustomDrawerContent'; 
 import { MaterialIcons } from '@expo/vector-icons';
 
-
+//entry point of the app so that we can check login status and create all our pages  when logoutbutton is pressed we go to handlelogout function
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
